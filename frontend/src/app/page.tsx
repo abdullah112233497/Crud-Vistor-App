@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import UserForm from '@/components/UserForm';
 import UserCard from '@/components/UserCard';
@@ -9,6 +10,8 @@ import EditModal from '@/components/EditModal';
 import { api, User } from '@/lib/api';
 
 export default function Home() {
+  const router = useRouter();
+  const [authLoading, setAuthLoading] = useState(true);
   const [users, setUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
@@ -33,8 +36,17 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
+    const checkAuth = async () => {
+      try {
+        await api.getMe();
+        setAuthLoading(false);
+        fetchUsers();
+      } catch (err) {
+        router.push('/login');
+      }
+    };
+    checkAuth();
+  }, [router, fetchUsers]);
 
   const handleDelete = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
@@ -55,6 +67,14 @@ export default function Home() {
     setEditingUser(null);
     fetchUsers();
   };
+
+  if (authLoading) {
+    return (
+      <div style={{ display: 'flex', minHeight: '100vh', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--background)' }}>
+        <p style={{ color: 'var(--text-muted)' }}>Loading dashboard...</p>
+      </div>
+    );
+  }
 
   return (
     <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>

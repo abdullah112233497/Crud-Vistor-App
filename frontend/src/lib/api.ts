@@ -18,10 +18,44 @@ export interface UserFormData {
 }
 
 export const api = {
+  async getMe(): Promise<any> {
+    const res = await fetch(`${API_BASE_URL}/me`, {
+      credentials: 'include',
+    });
+    if (!res.ok) throw new Error('Not authenticated');
+    return res.json();
+  },
+
+  async login(username: string, password: string): Promise<any> {
+    const params = new URLSearchParams();
+    params.append('username', username);
+    params.append('password', password);
+
+    const res = await fetch(`${API_BASE_URL}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params,
+      credentials: 'include',
+    });
+    if (!res.ok) throw new Error('Login failed');
+    return res.json();
+  },
+
+  async logout(): Promise<any> {
+    const res = await fetch(`${API_BASE_URL}/logout`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+    if (!res.ok) throw new Error('Logout failed');
+    return res.json();
+  },
+
   async getUsers(): Promise<User[]> {
     try {
       // Adding a timestamp ?t= to force the browser to get fresh data every time
-      const res = await fetch(`${API_BASE_URL}/users?t=${Date.now()}`);
+      const res = await fetch(`${API_BASE_URL}/users?t=${Date.now()}`, {
+        credentials: 'include',
+      });
       
       if (!res.ok) {
         if (res.status === 404) {
@@ -52,6 +86,7 @@ export const api = {
   async deleteUser(id: number): Promise<any> {
     const res = await fetch(`${API_BASE_URL}/delete_user/${id}`, {
       method: 'DELETE',
+      credentials: 'include',
     });
     if (!res.ok) throw new Error('Failed to delete user');
     return res.json();
@@ -62,6 +97,7 @@ export const api = {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user),
+      credentials: 'include',
     });
     if (!res.ok) throw new Error('Failed to update user');
     return res.json();
@@ -72,6 +108,7 @@ export const api = {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
+      credentials: 'include',
     });
     if (!res.ok) throw new Error('Failed to patch user');
     return res.json();
