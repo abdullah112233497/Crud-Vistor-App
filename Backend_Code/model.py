@@ -8,5 +8,6 @@ class User(Base):
     f_name=Column(String)
     age=Column(Integer)
     user_email=Column(String)
-    password=Column(String)
+    
+    hash_pw=Column(String)
  
