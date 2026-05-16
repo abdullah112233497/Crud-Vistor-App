@@ -52,7 +52,6 @@ export default function Header() {
           <div style={{
             textAlign: 'right',
             display: 'none',
-            sm: 'block'
           }}>
             <p style={{ fontSize: '12px', fontWeight: '700', margin: 0 }}>System Admin</p>
             <p style={{ fontSize: '10px', color: 'var(--text-muted)', margin: 0 }}>Active Now</p>

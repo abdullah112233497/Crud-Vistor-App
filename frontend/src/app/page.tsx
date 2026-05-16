@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import UserForm from '@/components/UserForm';
 import UserCard from '@/components/UserCard';
-import BottomNav from '@/components/BottomNav';
 import EditModal from '@/components/EditModal';
 import { api, User } from '@/lib/api';
 

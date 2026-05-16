@@ -2,9 +2,14 @@ import jwt
 from datetime import datetime, timedelta
 import bcrypt
 
-Token_secret="iam_abdullah_qaisar"
-ALGORITHM="HS256"
-Expiry_time=30
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+Token_secret = os.getenv("TOKEN_SECRET", "default_secret_fallback")
+ALGORITHM = os.getenv("ALGORITHM", "HS256")
+Expiry_time = int(os.getenv("EXPIRY_TIME", 30))
 
 def pw_hash(plain_pw):
     salt = bcrypt.gensalt()
